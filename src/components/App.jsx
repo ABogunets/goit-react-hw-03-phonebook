@@ -18,6 +18,19 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidMount() {
+    const savedContacts = load('contacts');
+    if (savedContacts) {
+      this.setState({ contacts: savedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      save('contacts', this.state.contacts);
+    }
+  }
+
   checkName = name => {
     const { contacts } = this.state;
     const normalizedName = name.toLowerCase();
@@ -63,19 +76,6 @@ export class App extends Component {
       filter: e.currentTarget.value,
     });
   };
-
-  componentDidMount() {
-    const savedContacts = load('contacts');
-    if (savedContacts) {
-      this.setState({ contacts: savedContacts });
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState.contacts) {
-      save('contacts', this.state.contacts);
-    }
-  }
 
   render() {
     const { filter } = this.state;
