@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
+import { load, save } from '../utils/storage';
 
 import { Container, Title, ContactsTitle } from './App.styled';
 import { ContactForm } from 'components/ContactForm/ContactForm';
@@ -62,6 +63,19 @@ export class App extends Component {
       filter: e.currentTarget.value,
     });
   };
+
+  componentDidMount() {
+    const savedContacts = load('contacts');
+    if (savedContacts) {
+      this.setState({ contacts: savedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      save('contacts', this.state.contacts);
+    }
+  }
 
   render() {
     const { filter } = this.state;
